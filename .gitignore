@@ -11,6 +11,12 @@ Thumbs.db
 
 # Logs
 *.log
+target/
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
 
 # Claude Code personal settings (shared settings.json IS committed after init)
 .claude/settings.local.json

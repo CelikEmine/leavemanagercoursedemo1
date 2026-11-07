@@ -9,8 +9,26 @@
 
 ## Frameworks & layout
 - Test piramidi hedefi: %70 unit, %20 integration, %10 E2E.
-- Backend ve frontend test araçları, test seçicileri, kritik E2E yolculukları ve süre bütçesi
-  henüz belirlenmedi. Önerilen araçlar ilk walking-skeleton planında karara bağlanmalıdır.
+- Backend unit/controller testleri JUnit Jupiter ve Spring Boot test desteğini kullanır.
+  PostgreSQL integration testleri `integration` etiketiyle ayrılır ve CI'daki PostgreSQL 17
+  service container'ına bağlanır.
+- Frontend component testleri Vitest + Testing Library ile jsdom üzerinde; E2E smoke testi
+  Playwright Chromium ile tek worker'da çalışır. Browser yolculuğu hazır ve kullanılamıyor
+  durumlarını doğrular; bütçesi iki dakikadır.
+- Java biçim denetimi Spotless/Google Java Format, frontend lint ESLint'tir. Frontend build,
+  TypeScript tür denetimini de içerir.
+
+## Test profilleri
+- `scripts/check --fast`: Java compile, format, backend unit, frontend dependency, lint, unit ve
+  production build adımları.
+- `scripts/check`: fast adımlarına ek olarak PostgreSQL integration ve Playwright E2E adımları.
+- Surefire `integration` etiketini dışlar; Failsafe yalnızca `integration` etiketini çalıştırır.
+  Frontend unit ve E2E testleri ayrı Vitest/Playwright komutlarıyla çağrılır; profillerde
+  yinelenen test bulunmaması AC-5 test envanteriyle doğrulanır.
+- Full profilde `frontend-e2e-browser` adımı, E2E'den önce Chromium ve sistem bağımlılıklarını
+  kurar; fast profil browser kurulumunu veya başlatılmasını içermez.
+- Full profil CI'da Java 17, Node.js 22, PostgreSQL 17 ve Playwright Chromium ile çalışır. Yerel
+  makinede full profil beklenmez; full yeşil CI sonucudur.
 
 ## What must be tested
 - Spec'teki her kabul kriteri en az bir test veya uygun kanıtla eşlenir.

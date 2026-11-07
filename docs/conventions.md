@@ -14,8 +14,15 @@
 
 ## Dil & Framework Versiyonları
 - **Java:** 17 LTS
-- **Spring Boot:** 2.7 LTS
-- PostgreSQL ve React sürümleri henüz belirlenmedi.
+- **Spring Boot:** 4.1.2 (Java 17 compatible; selected to stay on a supported release line)
+- **PostgreSQL:** 17 (CI integration test service)
+- **Node.js:** 22 LTS
+- **React:** 18.3.1
+
+## Araçla Uygulanan Kurallar
+- Java biçimlendirme: Spotless + Google Java Format (`./mvnw spotless:check`).
+- Frontend lint: ESLint; production build ayrıca TypeScript tür denetimini çalıştırır.
+- Frontend testleri: Vitest/Testing Library; browser smoke: Playwright Chromium, tek worker.
 
 ## Adlandırma
 - **Package:** `com.company.leavemanager.<module>` (önerilen paket kökü; şirket/organizasyon adı netleştirilecek)
