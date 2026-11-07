@@ -1,24 +1,21 @@
-# Domain
+# Alan Adı
 
-> **Template — filled during bootstrap.** The shared language between business, humans, and agents.
-> If a term isn't here, expect the AI to invent its own meaning for it.
+> **Bootstrap sırasında doldurulur.** İş ile kod arasında paylaşılan dil. Kararlaştırılmamış
+> terimleri ve kuralları varsayım olarak kullanmayın; özelliğe başlamadan önce netleştirin.
 
-## Ubiquitous language
-<!-- One row per term. Same word = same meaning, everywhere: code, specs, conversation. -->
+## Evrensel Dil
 
-| Term | Meaning | Notes / not to be confused with |
+| Terim | Anlamı | Notlar / Karışabilecek Kavramlar |
 |---|---|---|
-| | | |
+| Leave Manager | Çalışanların izin talep ettiği, yöneticilerin talepleri onaylayıp izlediği uygulama | Onay akışının ayrıntıları henüz belirlenmedi |
 
-## Business rules
-<!-- Numbered, testable statements. e.g. "BR-3: An order in status Delivered is immutable." -->
+## İş Kuralları
+Henüz belirlenmedi. İzin türleri, talep durumları, bakiye hesaplama ve tarih çakışması gibi
+kurallar ilk ilgili spec hazırlanırken insanla netleştirilmelidir.
 
-## Key domain invariants
-<!-- Things that must NEVER be violated, regardless of feature pressure. -->
+## Kritik Alan Değişmezleri
+Henüz belirlenmedi. İş kuralları netleşmeden alan değişmezi varsaymayın.
 
-## Sensitive areas
-<!-- Where a mistake costs money, access or legal standing (e.g. payments, identity, personal
-     data). A spec that touches one says so in Constraints (`Sensitive area: <name>`); there the
-     clarify gate is asked in lite too, every fix round but a documents-only one is
-     re-reviewed, and every criterion is proven red by one deliberate break
-     (workflows/README.md, Modes). "None" is a valid answer. -->
+## Hassas Alanlar
+Çalışan bilgileri ve izin talepleri kişisel/çalışma ilişkisi verisi içerebilir. Veri kapsamı,
+erişim kuralları ve saklama gereksinimleri ilgili spec'te netleştirilmelidir.

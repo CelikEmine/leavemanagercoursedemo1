@@ -1,15 +1,16 @@
-# AGENTS.md — Project Rules
+# AGENTS.md — Leave Manager Project
 
-> **STATUS: NOT CONFIGURED.** This workspace has not been adapted to a project yet.
-> The only correct first action is the bootstrap workflow (`workflows/bootstrap.md`).
-> Until bootstrap completes and rewrites this file, do not write application code.
+Leave Manager, kurumsal çalışanların izin taleplerini gönderdikleri, yöneticilerin
+bunları inceleyip onayladığı bir uygulamadır. Spring Boot + React stack'inde, katmanlı
+mimari ile, test pyramid (70% unit, 20% integration, 10% e2e) ve audit trail
+gereksinimleri ile. Lite mode: hızlı iterasyon, her segmentte gate onay.
 
 ## Operating mode
 
-**Mode: unset** — bootstrap sets `lite` or `strict` (`workflows/README.md`); every workflow honors its gates.
+**Mode: lite** — `/new-feature "<feature>"` segmentleri zincirle, her gatede sor.
 **Start work** with `/new-feature` in lite (it chains the segments and asks at each gate) or with
 `/analyze` in strict (one segment per role). Segment commands always stop (`workflows/segments.md`).
-**Language: unset** — bootstrap sets `chat=<xx> · docs=<xx>`; protocol fields stay English (`docs/conventions.md`).
+**Language: chat=Türkçe · docs=Türkçe** — protocol fields stay English (`docs/conventions.md`).
 
 ## Invariant rules (these survive bootstrap — never delete or weaken them)
 

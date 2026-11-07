@@ -8,26 +8,14 @@
 - The whole suite runs inside `scripts/check` — one command, everywhere.
 
 ## Frameworks & layout
-<!-- Test framework(s), where tests live, naming pattern. -->
+- Test piramidi hedefi: %70 unit, %20 integration, %10 E2E.
+- Backend ve frontend test araçları, test seçicileri, kritik E2E yolculukları ve süre bütçesi
+  henüz belirlenmedi. Önerilen araçlar ilk walking-skeleton planında karara bağlanmalıdır.
 
 ## What must be tested
-<!-- e.g. every business rule (BR-n), every boundary/forbidden dependency; the e2e journeys and
-     budget, if the project has e2e at all (Test layers). -->
-
-## Test layers
-1. **The cheapest test that proves the criterion.** Unit first, then component or integration
-   (UI states render in component tests), and a browser end-to-end test only for what no lower
-   layer can prove. A test sits at the lowest layer that fails for the right reason.
-2. **e2e is optional, and budgeted.** ANEW does not require end-to-end tests. A project that
-   has them names at bootstrap the few critical journeys they cover and a budget (journeys and
-   minutes, under "What must be tested"). Over budget, no e2e test is added: the next test goes a
-   layer down, or an existing one moves down.
-3. **What exists runs in check.** Every test, e2e included, is a check step — slow suites
-   full-only (Two speeds). A suite outside check costs its upkeep and proves nothing: it is never
-   evidence, and nobody sees it break.
-4. A UI criterion also needs a screenshot against the spec's User experience (Evidence for UI
-   criteria). The agent captures it and the human judges it at SHIP. The screenshot is no reason
-   for an e2e test: the states are tested at the lowest layer that can (rule 1).
+- Spec'teki her kabul kriteri en az bir test veya uygun kanıtla eşlenir.
+- İş kuralları ve hassas alan kriterleri, kurallar netleştikten sonra ilgili test katmanında
+  doğrulanır.
 
 ## Protected-tests rule
 Weakening asserts, deleting, or skipping tests to reach green is forbidden. A red test triggers
