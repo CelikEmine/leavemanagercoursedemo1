@@ -20,3 +20,6 @@ frontend/test-results/
 
 # Claude Code personal settings (shared settings.json IS committed after init)
 .claude/settings.local.json
+
+# Personal editor settings
+.vscode/
