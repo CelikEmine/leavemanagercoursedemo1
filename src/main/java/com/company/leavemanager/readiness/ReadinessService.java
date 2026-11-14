@@ -20,7 +20,11 @@ public class ReadinessService {
     try {
       return Integer.valueOf(1).equals(jdbcTemplate.queryForObject("SELECT 1", Integer.class));
     } catch (DataAccessException failure) {
-      LOGGER.warn("Database readiness probe failed: {}", failure.getClass().getSimpleName());
+      Throwable cause = failure.getMostSpecificCause();
+      LOGGER.warn(
+          "Database readiness probe failed: {}: {}",
+          cause.getClass().getSimpleName(),
+          cause.getMessage());
       return false;
     }
   }

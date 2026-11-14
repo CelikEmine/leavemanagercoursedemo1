@@ -1,5 +1,6 @@
 package com.company.leavemanager.readiness;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -7,10 +8,14 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @Tag("unit")
+@ExtendWith(OutputCaptureExtension.class)
 class ReadinessServiceTest {
 
   private final JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
@@ -29,5 +34,17 @@ class ReadinessServiceTest {
         .thenThrow(new DataAccessResourceFailureException("database unavailable"));
 
     assertFalse(readinessService.isDatabaseReady());
+  }
+
+  @Test
+  void logsMostSpecificCauseWhenDatabaseIsUnavailable(CapturedOutput output) {
+    when(jdbcTemplate.queryForObject("SELECT 1", Integer.class))
+        .thenThrow(
+            new DataAccessResourceFailureException(
+                "wrapper", new IllegalStateException("connection refused")));
+
+    assertFalse(readinessService.isDatabaseReady());
+    assertThat(output)
+        .contains("Database readiness probe failed: IllegalStateException: connection refused");
   }
 }
