@@ -13,3 +13,7 @@ step 7). Nothing lands here without that decision; noise is rejected in the tria
   — Recommendation: <the reviewer's action> — Deferred by: <name>, <YYYY-MM-DD>, <why>
   A decision deferred at bootstrap (its REPORT) uses Source: bootstrap <YYYY-MM-DD>.
 -->
+
+- **B-1** — Define module boundaries and forbidden dependencies — Source: bootstrap 2026-11-07
+  — Severity: design decision — Recommendation: decide module ownership and testable dependency
+  rules in the walking-skeleton plan — Deferred by: user, 2026-11-07, requested to decide later.

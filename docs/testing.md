@@ -8,26 +8,32 @@
 - The whole suite runs inside `scripts/check` — one command, everywhere.
 
 ## Frameworks & layout
-<!-- Test framework(s), where tests live, naming pattern. -->
+- Test piramidi hedefi: %70 unit, %20 integration, %10 E2E.
+- Backend unit/controller testleri JUnit Jupiter ve Spring Boot test desteğini kullanır.
+  PostgreSQL integration testleri `integration` etiketiyle ayrılır ve CI'daki PostgreSQL 17
+  service container'ına bağlanır.
+- Frontend component testleri Vitest + Testing Library ile jsdom üzerinde; E2E smoke testi
+  Playwright Chromium ile tek worker'da çalışır. Browser yolculuğu hazır ve kullanılamıyor
+  durumlarını doğrular; bütçesi iki dakikadır.
+- Java biçim denetimi Spotless/Google Java Format, frontend lint ESLint'tir. Frontend build,
+  TypeScript tür denetimini de içerir.
+
+## Test profilleri
+- `scripts/check --fast`: Java compile, format, backend unit, frontend dependency, lint, unit ve
+  production build adımları.
+- `scripts/check`: fast adımlarına ek olarak PostgreSQL integration ve Playwright E2E adımları.
+- Surefire `integration` etiketini dışlar; Failsafe yalnızca `integration` etiketini çalıştırır.
+  Frontend unit ve E2E testleri ayrı Vitest/Playwright komutlarıyla çağrılır; profillerde
+  yinelenen test bulunmaması AC-5 test envanteriyle doğrulanır.
+- Full profilde `frontend-e2e-browser` adımı, E2E'den önce Chromium ve sistem bağımlılıklarını
+  kurar; fast profil browser kurulumunu veya başlatılmasını içermez.
+- Full profil CI'da Java 17, Node.js 22, PostgreSQL 17 ve Playwright Chromium ile çalışır. Yerel
+  makinede full profil beklenmez; full yeşil CI sonucudur.
 
 ## What must be tested
-<!-- e.g. every business rule (BR-n), every boundary/forbidden dependency; the e2e journeys and
-     budget, if the project has e2e at all (Test layers). -->
-
-## Test layers
-1. **The cheapest test that proves the criterion.** Unit first, then component or integration
-   (UI states render in component tests), and a browser end-to-end test only for what no lower
-   layer can prove. A test sits at the lowest layer that fails for the right reason.
-2. **e2e is optional, and budgeted.** ANEW does not require end-to-end tests. A project that
-   has them names at bootstrap the few critical journeys they cover and a budget (journeys and
-   minutes, under "What must be tested"). Over budget, no e2e test is added: the next test goes a
-   layer down, or an existing one moves down.
-3. **What exists runs in check.** Every test, e2e included, is a check step — slow suites
-   full-only (Two speeds). A suite outside check costs its upkeep and proves nothing: it is never
-   evidence, and nobody sees it break.
-4. A UI criterion also needs a screenshot against the spec's User experience (Evidence for UI
-   criteria). The agent captures it and the human judges it at SHIP. The screenshot is no reason
-   for an e2e test: the states are tested at the lowest layer that can (rule 1).
+- Spec'teki her kabul kriteri en az bir test veya uygun kanıtla eşlenir.
+- İş kuralları ve hassas alan kriterleri, kurallar netleştikten sonra ilgili test katmanında
+  doğrulanır.
 
 ## Protected-tests rule
 Weakening asserts, deleting, or skipping tests to reach green is forbidden. A red test triggers

@@ -1,25 +1,21 @@
-# Architecture
+# Mimari
 
-> **Template — filled during bootstrap.** Describe the architecture you *decided on*, not an
-> aspiration. Agents read this file before planning; vague answers here become vague code.
+> **Bootstrap sırasında doldurulur.** Kararlaştırılmamış yapısal kararları varsaymayın.
 
-## System overview
-<!-- 3–6 sentences: what the system is, its architectural style (monolith / modular monolith /
-services / etc.), and the one-line reason for that choice (link the ADR). -->
+## Sistem Özeti
+Leave Manager, çalışanların izin talep ettiği, yöneticilerin talepleri onaylayıp izlediği
+uygulamadır. Katmanlı (Layered) mimari seçilmiştir. Uygulama sınırları ve katmanların somut
+sorumlulukları ilk feature spec'inde netleştirilmelidir.
 
-## Modules / components and ownership
-<!-- One row per module: single responsibility + the data it owns (conceptual, not table-level). -->
+## Modüller / Bileşenler ve Sorumluluğu
+Modül listesi ve veri sahipliği henüz kararlaştırılmadı.
 
-| Module | Single responsibility | Owns |
-|---|---|---|
-| | | |
+## İletişim Kuralları
+Henüz kararlaştırılmadı. Katmanlar ve modüller netleşince iletişim kuralları ilk plana eklenmelidir.
 
-## Communication rules
-<!-- When is a direct call allowed, when an event/message, when is it forbidden? -->
+## Yasak Bağımlılıklar (test edilebilir)
+Henüz kararlaştırılmadı. Modül sınırlarıyla birlikte ele alınması için
+`specs/backlog.md` kaydına bakın.
 
-## Forbidden dependencies (make them testable)
-<!-- Concrete prohibitions an architecture test could assert, e.g.
-"Module A never accesses Module B's internal types or storage — only its public interface." -->
-
-## Deliberately out of scope
-<!-- Conscious non-goals for the current version. -->
+## Kasıtlı Olarak Kapsam Dışında
+Henüz belirlenmedi.

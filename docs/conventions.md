@@ -1,39 +1,49 @@
-# Conventions
+# Konvansiyonlar
 
-> **Template — filled during bootstrap.** Only rules that are real: every rule here should be
-> either enforced by tooling (preferred) or checked in review. Aspirations don't belong here.
+> **Bootstrap sırasında doldurulur.** Yalnızca kararlaştırılmış veya açıkça araçla uygulanan
+> kurallar burada yer alır.
 
-## Language
-<!-- Set at bootstrap (step 0) and mirrored in AGENTS.md. Changing it later is allowed — edit both
-     places; existing documents are not translated retroactively. -->
-- Chat language (interviews, sessions): <!-- e.g. Turkish -->
-- Document language (docs/, specs, plans, ADRs, review and verify reports): <!-- e.g. Turkish -->
-- Always English (protocol, not prose): ANEW core files, template headings and field labels,
-  `Status:` values (Draft / Approved / In progress / Shipped), `Approved by / on:`, `Source:`.
-- Code identifiers, branch names, commit messages: <!-- default English; decide consciously -->
-- Agent messages (handoff summaries, refusals, `Next:` lines): chat language; command names, file
-  paths and protocol fields verbatim.
+## Dil
+- **Chat dili (görüşmeler, oturumlar):** Türkçe
+- **Belge dili (docs/, specs, planlar, ADR'ler, review ve verify raporları):** Türkçe
+- **Her zaman İngilizce (protokol, metin değil):** ANEW core dosyaları, template başlıkları ve alan etiketleri,
+  `Status:` değerleri (Draft / Approved / In progress / Shipped), `Approved by / on:`, `Source:`.
+- **Kod tanımlayıcıları, branch isimleri, commit mesajları:** İngilizce
+- **Ajan mesajları (handoff özetleri, reddetmeler, `Next:` satırları):** Türkçe; komut adları, dosya
+  yolları ve protokol alanları aynen.
 
-## Language & framework versions
-<!-- Pin what matters. -->
+## Dil & Framework Versiyonları
+- **Java:** 17 LTS
+- **Spring Boot:** 4.1.2 (Java 17 compatible; selected to stay on a supported release line)
+- **PostgreSQL:** 17 (CI integration test service)
+- **Node.js:** 22 LTS
+- **React:** 18.3.1
 
-## Naming
-<!-- Files, types, tests, branches — whatever the team must keep consistent. -->
+## Araçla Uygulanan Kurallar
+- Java biçimlendirme: Spotless + Google Java Format (`./mvnw spotless:check`).
+- Frontend lint: ESLint; production build ayrıca TypeScript tür denetimini çalıştırır.
+- Frontend testleri: Vitest/Testing Library; browser smoke: Playwright Chromium, tek worker.
 
-## Error handling
-<!-- The one blessed pattern. What never leaks to users. -->
+## Adlandırma
+- **Package:** `com.company.leavemanager.<module>` (önerilen paket kökü; şirket/organizasyon adı netleştirilecek)
+- **Classes:** PascalCase
+- **Methods/Fields:** camelCase
+- **Constants:** UPPER_SNAKE_CASE
+- **Branch ve dosya adları:** İngilizce; branch şeması `docs/git.md` içindedir.
 
-## Data rules
-<!-- e.g. money/percentages use decimal types; timestamps are UTC; IDs are ... -->
+## Hata Yönetimi
+- Özel exception'lar domain hatalarını temsil eder.
+- Hata yanıtları dahili ayrıntıları kullanıcıya açmaz.
+- Logging için SLF4J + Logback önerilmiştir; yapılandırma uygulama iskeletinde doğrulanacaktır.
 
-## Known traps
-<!-- Starts empty. One line per trap of this stack that a builder can know up front:
-     "<trap> — <what to do instead> — from <spec/finding>". A line is added when triage marks a
-     finding real and the reviewer says a build-time rule would have caught it; the human
-     approves it at triage as Amendment A-n and the Developer writes it in the fix round.
-     Builders read this section before the first plan step.
-     A trap that tooling can catch moves to "Enforced by tooling" instead. -->
+## Data Kuralları
+- Tarih/saat API temsili ISO 8601 olmalıdır.
+- Java tarafında tarih ve saat için `LocalDate` / `LocalDateTime` kullanılmalıdır.
+- Timezone ve kimlik biçimi henüz belirlenmedi.
 
-## Enforced by tooling
-<!-- List what the compiler/linter/analyzers already enforce, so review doesn't re-litigate it.
-Wire new rules into `scripts/check` whenever possible — prose is advice, tooling is law. -->
+## Bilinen Tuzaklar
+Başlangıçta kayıtlı tuzak yoktur.
+
+## Araçla Uygulanır
+Henüz araç seçilmedi veya `scripts/check` içine bağlanmadı. Walking-skeleton spec'i araçları
+seçip bu bölümü güncellemelidir.
