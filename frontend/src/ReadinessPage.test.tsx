@@ -1,10 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { READINESS_TIMEOUT_MS, ReadinessPage } from './ReadinessPage';
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
 
 describe('ReadinessPage', () => {
   it('rendersReadyState', async () => {
@@ -78,20 +74,36 @@ describe('ReadinessPage', () => {
   });
 
   it('exposesEachStateAccessibly', async () => {
+    const expectAnnouncedStatus = (text: string) => {
+      const status = screen.getByRole('status');
+      expect(status).toHaveTextContent(text);
+      expect(status).toHaveAttribute('aria-live', 'polite');
+    };
+
+    let resolveRequest: (response: unknown) => void = () => {};
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({ status: 'ready' }),
-      }),
+      vi.fn(
+        () =>
+          new Promise((resolve) => {
+            resolveRequest = resolve;
+          }),
+      ),
     );
-
-    render(<ReadinessPage />);
+    const readyPage = render(<ReadinessPage />);
 
     expect(screen.getByRole('heading', { name: 'Leave Manager' })).toBeVisible();
-    expect(screen.getByRole('status')).toHaveAttribute('aria-live', 'polite');
-    expect(await screen.findByRole('status')).toHaveTextContent(
-      'Backend ve veritabanı hazır.',
-    );
+    expectAnnouncedStatus('Servis durumları kontrol ediliyor…');
+
+    resolveRequest({ ok: true, json: async () => ({ status: 'ready' }) });
+    await screen.findByText('Backend ve veritabanı hazır.');
+    expectAnnouncedStatus('Backend ve veritabanı hazır.');
+    readyPage.unmount();
+
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }));
+    render(<ReadinessPage />);
+
+    await screen.findByText('Backend veya veritabanı kullanılamıyor.');
+    expectAnnouncedStatus('Backend veya veritabanı kullanılamıyor.');
   });
 });
