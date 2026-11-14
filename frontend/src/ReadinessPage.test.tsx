@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { ReadinessPage } from './ReadinessPage';
+import { READINESS_TIMEOUT_MS, ReadinessPage } from './ReadinessPage';
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -44,6 +44,37 @@ describe('ReadinessPage', () => {
     expect(await screen.findByRole('status')).toHaveTextContent(
       'Backend veya veritabanı kullanılamıyor.',
     );
+  });
+
+  it('rendersUnavailableWhenReadinessTimesOut', async () => {
+    vi.useFakeTimers();
+    try {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(
+          (_url: string, init?: RequestInit) =>
+            new Promise((_, reject) => {
+              init?.signal?.addEventListener('abort', () => {
+                reject(new DOMException('Aborted', 'AbortError'));
+              });
+            }),
+        ),
+      );
+
+      render(<ReadinessPage />);
+
+      expect(screen.getByRole('status')).toHaveTextContent(
+        'Servis durumları kontrol ediliyor…',
+      );
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(READINESS_TIMEOUT_MS);
+      });
+      expect(screen.getByRole('status')).toHaveTextContent(
+        'Backend veya veritabanı kullanılamıyor.',
+      );
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('exposesEachStateAccessibly', async () => {

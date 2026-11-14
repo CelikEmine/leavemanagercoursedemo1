@@ -15,11 +15,18 @@ function isReadinessPayload(value: unknown): value is ReadinessPayload {
   );
 }
 
+export const READINESS_TIMEOUT_MS = 5000;
+
 export function ReadinessPage() {
   const [state, setState] = useState<ReadinessState>('loading');
 
   useEffect(() => {
     const request = new AbortController();
+    let timedOut = false;
+    const timeout = window.setTimeout(() => {
+      timedOut = true;
+      request.abort();
+    }, READINESS_TIMEOUT_MS);
 
     void fetch('/api/readiness', { signal: request.signal })
       .then(async (response) => {
@@ -36,12 +43,16 @@ export function ReadinessPage() {
         );
       })
       .catch((error: unknown) => {
-        if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        if (timedOut || !(error instanceof DOMException && error.name === 'AbortError')) {
           setState('unavailable');
         }
-      });
+      })
+      .finally(() => window.clearTimeout(timeout));
 
-    return () => request.abort();
+    return () => {
+      window.clearTimeout(timeout);
+      request.abort();
+    };
   }, []);
 
   const message = {
