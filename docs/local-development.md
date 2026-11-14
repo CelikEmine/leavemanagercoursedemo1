@@ -53,6 +53,16 @@ Git Bash'i depo kökünde açıp hızlı profili çalıştırın:
 ./scripts/check --fast
 ```
 
+Varsayılan Node sürümünüz 22 değilse ve Volta kullanıyorsanız, global ayarı değiştirmeden
+Node 22 ile çalıştırın:
+
+```bash
+volta fetch node@22
+PATH="$(ls -d "$HOME"/AppData/Local/Volta/tools/image/node/22.* | tail -1):$PATH" ./scripts/check --fast
+```
+
+`volta run` komutu cmd üzerinden çalıştırdığı için `./scripts/check` ile kullanılamaz.
+
 Full profil PostgreSQL service container'ı ve Playwright browser'ı olan CI ortamında çalışır:
 
 ```bash
